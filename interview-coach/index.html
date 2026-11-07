@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>面试 / 谈判陪练官</title>
+<link rel="stylesheet" href="styles.css?v=20261024g">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark"></span>
+    <span class="brand-text">面试<span class="slash">/</span>谈判陪练官</span>
+  </div>
+  <div class="topbar-right">
+    <button id="btnSaved" class="ghost">我的收藏</button>
+    <button id="btnHistory" class="ghost">练习记录</button>
+    <button id="btnLogin" class="ghost">登录</button>
+    <div id="userChip" class="user-chip hidden">
+      <span id="userName" class="user-name"></span>
+      <button id="btnLogout" class="link-btn">退出</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ 选择台 ============ -->
+  <section id="screen-setup" class="screen">
+    <div class="setup-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero">
+        <div class="hero-text">
+          <div class="kicker">CAMPUS / ACADEMIC / GRADUATE / CAREER / PUBLIC / DEFENSE</div>
+          <h1>它会追问，<br>直到你的答案站得住。</h1>
+          <div class="lede-line">
+            <span class="lede-meme">只因你面试实在是太美</span>
+            <button id="btnMeme" class="meme-play" type="button" title="点一下" aria-label="播放语音">
+              <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M9 6.2v11.6L19 12 9 6.2Z" fill="currentColor"/></svg>
+            </button>
+          </div>
+          <details class="lede-more">
+            <summary>它到底怎么出题</summary>
+            <p>六大类场景，从社团招新到毕业论文答辩。每一类都按它真正在筛的东西出题：社团先自我介绍，再问你了解我们哪场活动、哪里能改、让你现场策划一场；学生组织查你报的那个部门的手艺——美编、信息整合、通知统筹；保研不给开放题，拿一个具体命题让你当场判断；实习直接发一个这个岗位的活（一条视频、一次投放），问你创意、怎么做、怎么让人看到；答辩翻到你引的那篇文献，问你到底读没读过、观点和论据打不打架。你贴了材料，它照着材料问；没贴，就从你自己的回答里找题。每道题追问一到三层，追到哪一层由压力档决定，追问的回答一样计分。它不问废话——几点到的、在哪间教室、社长叫什么，答对了也不改变判断，一律不问。英语那几轮可以开口说，语法用词和语速单独算分。结束后按 rubric 打分，逐题复盘，再把最弱的那一题重放一遍。</p>
+          </details>
+          <div class="hero-tags">
+            <span>16 个轮次</span><span>390 道真题</span><span>按场景出题</span><span>每题追问 1–3 层</span><span>英语单算语言分</span>
+          </div>
+        </div>
+        <figure class="hero-figure">
+          <div class="hf-frame">
+            <img src="assets/mascot-grad.jpg" alt="穿学位服的黄色小人" loading="lazy">
+          </div>
+          <figcaption>它不评价你，它只问到你答不出来为止。</figcaption>
+        </figure>
+      </div>
+
+      <div class="setup-grid">
+        <div class="block">
+          <div class="block-head"><span class="num">01</span><h2>场景</h2><span class="opt">先选一个大类</span></div>
+          <div class="scene-grid" id="sceneGrid"></div>
+          <div class="scene-desc" id="sceneDesc"></div>
+        </div>
+
+        <div class="block">
+          <div class="block-head"><span class="num">02</span><h2>具体类型</h2></div>
+          <div class="round-grid" id="roundGrid"></div>
+          <div class="round-preview" id="roundPreview"></div>
+        </div>
+
+        <div class="block">
+          <div class="block-head"><span class="num">03</span><h2 id="subjectLabel">岗位</h2></div>
+          <div class="chips" id="jobChips"></div>
+          <input id="jobCustom" class="text-input hidden" placeholder="具体一点，例如：AI 产品经理（B 端）" maxlength="40">
+        </div>
+
+        <div class="block">
+          <div class="block-head"><span class="num">04</span><h2>压力与节奏</h2></div>
+          <div class="row">
+            <div class="seg" id="pressureSeg"></div>
+            <div class="seg" id="countSeg"></div>
+          </div>
+          <div class="row row-field">
+            <label class="field">
+              <span>面试官</span>
+              <select id="personaSelect"></select>
+            </label>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head"><span class="num">05</span><h2>模式</h2><span class="opt">练习不限时，实战有倒计时</span></div>
+          <div class="seg" id="modeSeg"></div>
+          <div class="mode-note" id="modeNote"></div>
+          <div class="row row-field hidden" id="limitRow">
+            <label class="field">
+              <span>每题限时</span>
+              <select id="limitSelect"></select>
+            </label>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head"><span class="num">06</span><h2 id="bgLabel">背景材料<span class="opt">可选</span></h2></div>
+          <textarea id="bgInput" rows="4" maxlength="6000"
+            placeholder="贴一段简历、项目描述，或你想要的薪资数字。贴着材料问，问题会具体得多。"></textarea>
+          <div class="bg-tools">
+            <button id="btnUpload" class="ghost small" type="button">上传文件</button>
+            <input id="fileInput" type="file" multiple accept=".txt,.md,.markdown,.csv,.json,.docx,text/plain" class="hidden">
+            <span class="bg-hint">支持 txt / md / csv / docx，也可以直接把文件拖到这里。PDF 请先另存为文本。</span>
+          </div>
+          <div class="bg-hint bg-hint-wide">写得具体些：做了什么决定、数字怎么来的、放弃了什么、哪里没做好。哪天在哪间教室参加的活动这类记录不用写——它不会问，问了你答对了也不加分。</div>
+          <div class="file-chips" id="fileChips"></div>
+          <input id="focusInput" class="focus-input" type="text" maxlength="160"
+            placeholder="想让对方重点追问什么（可选）：例 只问数据口径和团队分工 / 想练怎么解释转专业 / 论文的方法部分">
+        </div>
+        <div class="block">
+          <div class="block-head"><span class="num">07</span><h2>前情概要<span class="opt">四个小问题，两秒点完</span></h2></div>
+          <div class="brief-note" id="briefNote">点完这几下，它会按你的情况问。不填也行。</div>
+          <div class="brief-grid" id="briefGrid"></div>
+        </div>
+      </div>
+
+      <div class="preset-bar" id="presetBar"></div>
+
+      <div class="start-bar">
+        <div class="start-summary" id="startSummary"></div>
+        <button id="btnStart" class="primary big">进入面试室 <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 面试室 ============ -->
+  <section id="screen-room" class="screen hidden">
+    <div class="room">
+      <div class="room-main">
+        <div class="room-head">
+          <div class="room-meta" id="roomMeta"></div>
+          <div class="room-actions">
+            <span class="q-timer hidden" id="qTimer">90</span>
+            <span class="timer" id="timer">00:00</span>
+            <button id="btnExit" class="ghost small" title="回到选择台（本轮不保存）">← 退出</button>
+            <button id="btnFinish" class="ghost small">结束并评分</button>
+          </div>
+        </div>
+        <div class="chat" id="chat"></div>
+        <div class="composer">
+          <textarea id="answerInput" rows="3" placeholder="像真面试那样回答。Ctrl / ⌘ + Enter 发送。"></textarea>
+          <div class="composer-foot">
+            <span class="hint" id="composerHint">它在听你怎么说，也在听你没说什么</span>
+            <div class="composer-btns">
+              <button id="btnMic" class="mic-btn" type="button" title="语音作答：点一下开始说，再点一下停止">
+                <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span class="mic-txt">说</span><i class="mic-dot"></i>
+              </button>
+              <button id="btnSkip" class="ghost small">跳过这题</button>
+              <button id="btnSend" class="primary">回答</button>
+            </div>
+          </div>
+          <div class="voice-bar hidden" id="voiceBar">
+            <span class="vb-dot"></span>
+            <span id="voiceState">正在听…</span>
+            <span class="vb-lang" id="voiceLang">EN</span>
+            <span class="vb-tip">说完再点一次麦克风；转写出来的字可以手改</span>
+          </div>
+        </div>
+      </div>
+      <aside class="room-side">
+        <div class="side-card">
+          <div class="side-label">压力档</div>
+          <div class="side-strong" id="sidePressure"></div>
+          <div class="side-note" id="sidePressureNote"></div>
+        </div>
+        <div class="side-card">
+          <div class="side-label">本轮盯什么</div>
+          <div class="side-focus" id="sideFocus"></div>
+        </div>
+        <div class="side-card">
+          <div class="side-label">进度</div>
+          <div class="progress-line" id="sideProgress"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 复盘报告 ============ -->
+  <section id="screen-report" class="screen hidden">
+    <div class="wrap wrap-report">
+      <div id="reportHero"></div>
+      <div id="reportBody"></div>
+      <div class="report-actions" id="reportActions"></div>
+    </div>
+  </section>
+
+  <!-- ============ 重放训练 ============ -->
+  <section id="screen-drill" class="screen hidden">
+    <div class="room room-drill">
+      <div class="room-main">
+        <div class="room-head">
+          <div class="room-meta" id="drillMeta"></div>
+          <div class="room-actions">
+            <button id="btnDrillHome" class="ghost small">回到选择台</button>
+            <button id="btnDrillExit" class="ghost small">返回复盘</button>
+          </div>
+        </div>
+        <div class="chat" id="drillChat"></div>
+        <div class="composer">
+          <textarea id="drillInput" rows="3" placeholder="重来一次，把上一次没给的证据补上。"></textarea>
+          <div class="composer-foot">
+            <span class="hint" id="drillHint">这一轮只练一道题，答两次就结束</span>
+            <div class="composer-btns">
+              <button id="btnDrillMic" class="mic-btn" type="button" title="语音作答：点一下开始说，再点一下停止">
+                <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span class="mic-txt">说</span><i class="mic-dot"></i>
+              </button>
+              <button id="btnDrillSend" class="primary">回答</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <aside class="room-side" id="drillSide"></aside>
+    </div>
+  </section>
+
+  <!-- ============ 我的收藏 ============ -->
+  <section id="screen-saved" class="screen hidden">
+    <div class="wrap wrap-report">
+      <div class="section-head-lg">
+        <h2>我的收藏</h2>
+        <button id="btnBackHome2" class="ghost small">← 回到选择台</button>
+      </div>
+      <p class="saved-lede">收藏是复盘里给出的参考回答。面试前翻一遍，比临时想词管用。</p>
+      <div id="savedList"></div>
+    </div>
+  </section>
+
+  <!-- ============ 练习记录 ============ -->
+  <section id="screen-history" class="screen hidden">
+    <div class="wrap wrap-report">
+      <div class="section-head-lg">
+        <h2>练习记录</h2>
+        <button id="btnBackHome" class="ghost small">← 回到选择台</button>
+      </div>
+      <div id="historyList"></div>
+    </div>
+  </section>
+</main>
+
+<!-- 评分等待层 -->
+<div id="scoring" class="overlay hidden">
+  <div class="overlay-card">
+    <div class="spinner"></div>
+    <div class="overlay-title">正在核对你的每一句话</div>
+    <div class="overlay-step" id="scoringStep">拆解你的回答…</div>
+  </div>
+</div>
+
+<!-- 登录弹窗 -->
+<div id="authModal" class="modal hidden">
+  <div class="modal-card">
+    <button class="modal-x" id="authClose">×</button>
+    <h3 id="authTitle">登录后保存练习记录</h3>
+    <p class="modal-sub">练习本身不需要登录；登录是为了把复盘存在云端，下次接着练。</p>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="phone">手机号</button>
+      <button class="tab" data-tab="email">邮箱</button>
+    </div>
+
+    <div id="tabPhone" class="tab-panel">
+      <input id="phoneInput" class="text-input" inputmode="numeric" maxlength="11" placeholder="11 位手机号">
+      <div class="field-error hidden" id="phoneError">请输入正确的 11 位手机号</div>
+    </div>
+    <div id="tabEmail" class="tab-panel hidden">
+      <input id="emailInput" class="text-input" type="email" placeholder="邮箱地址">
+    </div>
+
+    <div class="otp-row">
+      <input id="codeInput" class="text-input" inputmode="numeric" maxlength="6" placeholder="6 位验证码">
+      <button id="btnSendCode" class="ghost small">获取验证码</button>
+    </div>
+
+    <button id="btnAuthSubmit" class="primary full">登录 / 注册</button>
+    <div class="divider"><span>或</span></div>
+    <button id="btnWechat" class="wechat-btn">
+      <span class="wx-dot"></span> 微信扫码登录
+    </button>
+    <div class="auth-error hidden" id="authError"></div>
+    <p class="modal-foot">未注册的手机号 / 邮箱验证后即自动创建账号。</p>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="cloud-config.js?v=20261024g"></script>
+<script src="vendor/workbuddy-cloud-sdk.js?v=20261024g"></script>
+<script src="bank.js?v=20261024g"></script>
+<script src="bank-extra.js?v=20261024g"></script>
+<script src="prompts.js?v=20261024g"></script>
+<script src="app.js?v=20261024g"></script>
+</body>
+</html>
